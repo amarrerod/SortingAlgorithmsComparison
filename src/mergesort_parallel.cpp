@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 	MPI_Finalize();
 	auto end = std::chrono::system_clock::now();
 	std::chrono::duration<double> diff = end - start;		
-	cout << size << endl << diff.count() << endl;
+	cout << diff.count() << endl;
 	return 0;
 }
 

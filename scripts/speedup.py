@@ -1,8 +1,8 @@
 #!/bin/python
 
-size = 1000000000
+size = 100000000
 algorithms = ["merge_parallel"]
-np = [2, 4, 6, 8, 10, 12, 14, 16, 10, 20]
+np = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 
 for alg in algorithms:
     for i in np:
