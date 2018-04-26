@@ -2,9 +2,9 @@
 import os, sys, re
 
 
-algorithm = "merge_sequential"
+algorithm = "quicksort"
 reps = 10
-result_dir = "../results/"
+result_dir = "../results/quicksort/sequential/"
 index_array = []
 times_array = [[]]
 
@@ -28,7 +28,7 @@ for filename in os.listdir(result_dir):
                 else:
                     line = f.readline()
 
-filename = "../results/merge/results_sequentials.rs"
+filename = "../results/quicksort/results_sequential.rs"
 with open(filename, "a") as f:
     f.write("# " + algorithm)
     for size in index_array:
