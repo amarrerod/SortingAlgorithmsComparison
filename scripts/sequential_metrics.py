@@ -1,6 +1,7 @@
 #!/bin/python
 import sys
 import statistics 
+import matplotlib.pyplot as plt
 
 args = 2
 reps = 10
@@ -8,6 +9,7 @@ basedir = "../results/"
 instructions = "#size, mean, median, standard deviation\n"
 index_array = []
 values_array = []
+mean = []
 limit = 10000000
 
 def usage():
@@ -37,11 +39,22 @@ def compute_metrics(path):
         file.write(instructions)
         for idx, array in enumerate(values_array):
             avg = statistics.mean(array)
+            mean.append(avg)
             med = statistics.median(array)
             dev = statistics.pstdev(array)
             size = index_array[idx]
             string = str(size) + ", " + str(avg) + ", " + str(med) + ", " + str(dev) + "\n"
             file.write(string)
+
+def generate_plot():
+    f, ax = plt.subplots(1)
+    x_data = [i for i in range(0, len(index_array))]
+    y_data = mean
+    plt.xticks(x_data, index_array)
+    ax.plot(x_data, y_data)
+    plt.ylabel("performance mean time (ms)")
+    plt.xlabel("number of items to sort")
+    plt.show(f)
 
 def main(argv):
     if(len(argv)!= args):
@@ -50,6 +63,7 @@ def main(argv):
     else:
         read_data(argv[0])
         compute_metrics(argv[1])
+        generate_plot()
 
 if __name__ == '__main__':
     main(sys.argv[1:])
