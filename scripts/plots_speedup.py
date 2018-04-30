@@ -41,6 +41,7 @@ def compute_times():
 def create_plot():
     x  = index_array[2:]
     y = times[2:]
+    plt.style.use('fivethirtyeight')
     plt.plot(x, y, linewidth=2.0)
     plt.ylabel("speed-up")
     plt.xlabel("number of processors")

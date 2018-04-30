@@ -12,6 +12,7 @@ merge_parallel: mergesort_parallel.cpp
 
 quicksort: quicksort.cpp
 	$(GCC) $(FLAGS) -o $@ $^
+
 clean:
 	rm merge_sequential
 	rm merge_parallel

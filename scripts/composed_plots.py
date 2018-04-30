@@ -16,7 +16,7 @@ mean_algorithm2 = []
 limit = 10000000
 
 def usage():
-    print("$ python sequential_metrics.py <path_to_data_file> <path_to_data_file>\n")
+    print("$ python composed_plots.py <path_to_data_file> <path_to_data_file>\n")
 
 def read_data(path, alg):
     filename = basedir + path    
@@ -54,12 +54,14 @@ def compute_metrics(alg):
 
 def generate_plot():
     x_data = [i for i in range(0, len(index_array))]
+    plt.style.use('fivethirtyeight')
     plt.xticks(x_data, index_array)
-    plt.plot(x_data, mean_algorithm1, 'r', label="Merge Sort")
-    plt.plot(x_data, mean_algorithm2, 'g', label="Quick Sort")
-    plt.ylabel("performance mean time (ms)")
+    plt.plot(x_data, mean_algorithm1, color='blue', linewidth=1, alpha=0.4, label='MSort')
+    plt.plot(x_data, mean_algorithm2, color='red', linewidth=1, alpha=0.7, label='QSort')
+    plt.ylabel("performance mean time (s)")
     plt.xlabel("number of items to sort")
-    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=1.)
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=1, mode="expand", borderaxespad=0)
+  #  plt.legend([mean_algorithm1, mean_algorithm2], ["Merge Sort", "Quick Sort"])
     plt.show()
 
 def main(argv):

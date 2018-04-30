@@ -47,14 +47,16 @@ def compute_metrics(path):
             file.write(string)
 
 def generate_plot():
-    f, ax = plt.subplots(1)
+    #f, ax = plt.subplots(1)
     x_data = [i for i in range(0, len(index_array))]
     y_data = mean
+    plt.style.use('fivethirtyeight')
     plt.xticks(x_data, index_array)
-    ax.plot(x_data, y_data)
-    plt.ylabel("performance mean time (ms)")
+   # ax.plot(x_data, y_data)
+    plt.plot(x_data, y_data, color='blue', linewidth=1.5, alpha=0.4, label='QSort')
+    plt.ylabel("performance mean time (s)")
     plt.xlabel("number of items to sort")
-    plt.show(f)
+    plt.show()
 
 def main(argv):
     if(len(argv)!= args):
