@@ -16,8 +16,11 @@ const int DEF_SIZE = 100;
 void merge(int *, int *, int, int, int);
 void mergeSort(int *, int *, int, int);
 
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::milliseconds ms;
+typedef std::chrono::duration<float> fsec;
+
 int main(int argc, char** argv) {
-	auto start = std::chrono::system_clock::now();
 	int size = 0;
 	if(argc <= 1)
 		size = DEF_SIZE;
@@ -40,15 +43,21 @@ int main(int argc, char** argv) {
 	int* subArray = new int[chunk];	
 	MPI_Scatter(unsorted, chunk, MPI_INT, subArray, chunk, MPI_INT, 0, MPI_COMM_WORLD);
 	int* tempArray = new int[chunk];
+	auto start = Time::now();
 	mergeSort(subArray, tempArray, 0, (chunk - 1));		// Llamadas en cada proceso
+	auto end = Time::now();
 	if(rank == 0) 
 		sorted = new int[size];
 	
 	MPI_Gather(subArray, chunk, MPI_INT, sorted, chunk, MPI_INT, 0, MPI_COMM_WORLD);
 	// Comprobamos todo el array en conjunto
+	auto finalStart = Time::now();
+	auto finalEnd = Time::now();
 	if(rank == 0) {
 		int* copyArray = new int[size];
+		finalStart = Time::now();
 		mergeSort(sorted, copyArray, 0, (size - 1));
+		finalEnd = Time::now();
 		free(sorted);
 		free(copyArray);	
 	}
@@ -57,9 +66,10 @@ int main(int argc, char** argv) {
 	free(tempArray);
 	MPI_Barrier(MPI_COMM_WORLD);
 	MPI_Finalize();
-	auto end = std::chrono::system_clock::now();
-	std::chrono::duration<double> diff = end - start;		
-	cout << diff.count() << endl;
+	fsec finalDiff = finalEnd - finalStart;
+	fsec diff = (end -  start);
+	diff += finalDiff;		
+	cout << size << endl << diff.count() << endl;
 	return 0;
 }
 

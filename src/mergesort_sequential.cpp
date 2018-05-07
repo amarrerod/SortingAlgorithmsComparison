@@ -15,8 +15,11 @@ const int DEF_SIZE = 100;
 void merge(int *, int *, int, int, int);
 void mergeSort(int *, int *, int, int);
 
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::milliseconds ms;
+typedef std::chrono::duration<float> fsec;
+
 int main(int argc, char** argv) {
-	auto start = std::chrono::system_clock::now();
 	int size = 0;
 	if(argc <= 1)
 		size = DEF_SIZE;
@@ -30,10 +33,11 @@ int main(int argc, char** argv) {
 	for(int i = size; i--; ){
 		unsorted[i] = dist(mt);
 	}
+	auto start = Time::now();
 	mergeSort(unsorted, sorted, 0, (size - 1));
-	auto end = std::chrono::system_clock::now();
-	std::chrono::duration<double> diff = end - start;			
-	cout << size << endl << diff.count() << endl;
+	auto end = Time::now();
+	fsec fs = end - start;	
+	cout << size << endl << fs.count() << endl;
 	delete unsorted;
 	delete sorted;
 }

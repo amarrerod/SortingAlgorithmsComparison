@@ -4,13 +4,13 @@ import statistics
 import matplotlib.pyplot as plt
 
 args = 2
-reps = 10
+reps = 1
 basedir = "../results/"
 instructions = "#size, mean, median, standard deviation\n"
 index_array = []
 values_array = []
 mean = []
-limit = 10000000
+limit = 65536000
 
 def usage():
     print("$ python sequential_metrics.py <path_to_data_file> <path_to_result_file>\n")
@@ -53,8 +53,8 @@ def generate_plot():
     plt.style.use('fivethirtyeight')
     plt.xticks(x_data, index_array)
    # ax.plot(x_data, y_data)
-    plt.plot(x_data, y_data, color='blue', linewidth=1.5, alpha=0.4, label='QSort')
-    plt.ylabel("performance mean time (s)")
+    plt.plot(x_data, y_data, color='red', linewidth=2.0, alpha=0.4, label='QSort')
+    plt.ylabel("performance time (s)")
     plt.xlabel("number of items to sort")
     plt.show()
 
