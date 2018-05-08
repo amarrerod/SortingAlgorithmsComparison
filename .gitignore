@@ -2,3 +2,4 @@ src/merge_parallel
 src/merge_sequential
 src/quicksort
 .vscode/*
+src/merge_cuda

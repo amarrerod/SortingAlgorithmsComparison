@@ -4,7 +4,7 @@ CUDA=nvcc
 CFLAGS= -arch=compute_35
 FLAGS=-std=c++11
 
-all: merge_parallel merge_sequential merge_cuda quicksort
+all: merge_parallel merge_sequential merge_cuda
 
 merge_sequential: mergesort_sequential.cpp
 	$(GCC) $(FLAGS) -o $@ $^
@@ -12,14 +12,10 @@ merge_sequential: mergesort_sequential.cpp
 merge_parallel: mergesort_parallel.cpp
 	$(MPI) $(FLAGS) -o $@ $^
 
-quicksort: quicksort.cpp
-	$(GCC) $(FLAGS) -o $@ $^
-
 merge_cuda: merge_cuda.cu
-	$(CUDA) -O3 -DTIMING -o $@ $^
+	$(CUDA) $(FLAGS) -O3 -arch=sm_21 -lboost_chrono -lboost_system -o $@ $^
 
 clean:
 	rm merge_sequential
 	rm merge_parallel
-	rm quicksort
 	rm merge_cuda
