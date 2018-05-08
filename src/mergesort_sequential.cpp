@@ -1,3 +1,10 @@
+/*
+ * @Author: Alejandro Marrero 
+ * @Contact: alu0100825008@ull.edu.es 
+ * @Date: 2018-05-08 18:56:58 
+ * @Last Modified time: 2018-05-08 18:56:58 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,16 +15,15 @@
 
 using namespace std;
 
-const int LOWER = -100;
-const int UPPER = 100;
+const int LOWER = 0.0;
+const int UPPER = 1.0;
 const int DEF_SIZE = 100;
-
-void merge(int *, int *, int, int, int);
-void mergeSort(int *, int *, int, int);
-
 typedef std::chrono::high_resolution_clock Time;
 typedef std::chrono::milliseconds ms;
 typedef std::chrono::duration<float> fsec;
+
+void merge(int *, int *, int, int, int);
+void mergeSort(int *, int *, int, int);
 
 int main(int argc, char** argv) {
 	int size = 0;

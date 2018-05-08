@@ -1,3 +1,9 @@
+/*
+ * @Author: Alejandro Marrero 
+ * @Contact: alu0100825008@ull.edu.es 
+ * @Date: 2018-05-08 18:56:58 
+ * @Last Modified time: 2018-05-08 18:56:58 
+ */
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -7,7 +13,10 @@
 #include <thrust/host_vector.h>
 #include <thrust/sort.h>
 
-void rnd_fill(thrust::host_vector<double> &V, const double lower, const double upper, const unsigned int seed) {
+const int LOWER = 0.0;
+const int UPPER = 1.0;
+
+void fillVector(thrust::host_vector<double> &V, const double lower, const double upper, const unsigned int seed) {
     srand(time(NULL));
     size_t elem = V.size();
     for( size_t i = 0; i < elem; ++i){
@@ -16,25 +25,22 @@ void rnd_fill(thrust::host_vector<double> &V, const double lower, const double u
 }
 
 int main() {
-    thrust::host_vector<double> V;
-    thrust::device_vector<double> d_V;
-    //use the system time to create a random seed
+    thrust::host_vector<double> hostVector;
+    thrust::device_vector<double> deviceVector;
     unsigned int seed = (unsigned int) time(NULL);
-    size_t mem = 100000000;
-    for(int i = 500; i <= mem; i *= 2 ) {
-        V.resize(i);
-        rnd_fill(V, -100.0, 100.0, seed);
+    size_t limit = 100000000;
+    for(int i = 500; i <= limit; i *= 2 ) {
+        hostVector.resize(i);
+        fillVector(V, LOWER, UPPER, seed);
         boost::chrono::steady_clock::time_point start_cpu = boost::chrono::steady_clock::now();
-        d_V = V; // Transfer data to the GPU
+        deviceVector = hostVector;
         boost::chrono::steady_clock::time_point end_cpu = boost::chrono::steady_clock::now();
-        double dt1 = boost::chrono::duration <double, boost::milli> (end_cpu - start_cpu).count();
+        double durationCPU = boost::chrono::duration <double, boost::milli> (end_cpu - start_cpu).count();
 	    cudaEvent_t start, stop;
 	    cudaEventCreate(&start);
 	    cudaEventCreate(&stop);
-	    //Start recording
 	    cudaEventRecord(start,0);
         thrust::stable_sort(d_V.begin(), d_V.end());
-	    //Stop recording
 	    cudaEventRecord(stop,0);
 	    cudaEventSynchronize(stop);
 	    float elapsedTime;
@@ -42,10 +48,10 @@ int main() {
 	    cudaEventDestroy(start);
 	    cudaEventDestroy(stop);
         start_cpu = boost::chrono::steady_clock::now();
-        V = d_V; // Transfer data to the CPU
+        hostVector = deviceVector;
         end_cpu = boost::chrono::steady_clock::now();
-        double dt2 = boost::chrono::duration <double, boost::milli> (end_cpu - start_cpu).count();
-	    std::cout << i << std::endl << ((elapsedTime + dt1 + dt2) * 0.001) << std::endl;
+        double durationCPU_2 = boost::chrono::duration <double, boost::milli> (end_cpu - start_cpu).count();
+	    std::cout << i << std::endl << ((elapsedTime + durationCPU + durationCPU_2) * 0.001) << std::endl;
     }
     return 0;
 }
